@@ -106,6 +106,48 @@ def hasUrl(tweet) :
 
     return urlLst;
 
+def mostUsedWord(tweet):
+    wordLst = tweet.split(" ")
+    mostUsedWordInTweet = ""
+    mostUsed = 0
+    for i in range(len(wordLst)):
+        cnt = 0
+        for j in range(len(wordLst)):
+            if(wordLst[i] == wordLst[j]):
+                cnt = cnt + 1
+
+        if(cnt > mostUsed):
+            mostUsed = cnt
+            mostUsedWordInTweet = wordLst[i]
+    return mostUsedWordInTweet
+
+#print("En cok kullanilan kelime:%s, %d kez tekrar edilmis" %(mostUsedWordInTweet, mostUsed))
+
+def FindNumberOfWord(tweet, word):
+    counter = []
+    words_tweet = []
+    words_tag = []
+    #print(tweet)
+    #print(word)
+
+    # tweeti kelime kelime ayirdik
+    for x in tweet.split(" "):
+        words_tweet.append(x)
+
+    # aranan etiketimizi kelimelere ayirdik
+    for y in word.split(" "):
+        words_tag.append(y)
+
+    for i in range(0, len(words_tweet)):
+        for j in range(0, len(words_tag)):
+            if words_tweet[i] == words_tag[j]:
+                counter.append(i + 1)
+
+    #print("num of :", counter)
+    return counter
+
+
+
 def main():
     data = {
         'Word Before': [''],
@@ -158,15 +200,35 @@ def main():
         'WA Contain Number': [''],
         'WA Has Hashtag': [''],
         'WA Has Url': [''],
+
+
+        'Tweet' : [''],
+        'Tweet including the word Has Punct BA' : [''],
+        'Tweet including the word Has Punct BA' : [''],
+        'Tweet including the word Has Hashtag' : [''],
+        'Tweet including the word Has Mention' : [''],
+        'Tweet including the word Has Url' : [''],
+        'Frequently used word in Tweet' : [''],
+        'Tweet FAV Ratio' : [''],
+        'Tweet RT Ratio' : [''],
+        'Tweet Has Location' : [''],
+        'Tweet Has Checkin' : [''],
+        'Tweet Sent From Mobile Device' : [''],
+        'Length of tweet as # of words' : [''],
+        'Length of tweet as # of characters' : [''],
+
     }
 
     words = []
+    tweet=[]
     with open('1.txt', 'r') as f:
         for line in f:
+            tweet.append(line)
             for word in line.split():
                 words.append(word)
 
     df = pd.DataFrame(data, index=words)
+    df2=pd.DataFrame(data, index=tweet)
 
     print('.....')
     """for i, row in df.iterrows():
@@ -192,14 +254,14 @@ def main():
         df.iloc[j]['WB Letter Diff Stem'] = len(df.index[j - 1]) - len(df.index[j - 1])
         df.iloc[j]['WB Is Capital'] = df.index[j - 1].istitle()
         df.iloc[j]['WB Is All Capital'] = df.index[j - 1].isupper()
-        df.iloc[j]['WB Has Punct BA'] = df.index[j - 1].hasPunctuation()
-        df.iloc[j]['WB Has Emot BA'] = df.index[j - 1].hasEmoticon()
-        df.iloc[j]['WB Has Double Consonant'] = df.index[j - 1].hasConsonant()
-        df.iloc[j]['WB Has Double Vowel'] = df.index[j - 1].hasVowel()
+        df.iloc[j]['WB Has Punct BA'] = hasPunctuation(df.index[j - 1])
+        df.iloc[j]['WB Has Emot BA'] = hasEmoticon(df.index[j - 1])
+        df.iloc[j]['WB Has Double Consonant'] = hasConsonant(df.index[j - 1])
+        df.iloc[j]['WB Has Double Vowel'] = hasVowel(df.index[j - 1])
         df.iloc[j]['WB Has Harmony'] = ''
-        df.iloc[j]['WB Contains Number'] = df.index[j - 1].containNumber()
-        df.iloc[j]['WB Has Hashtag'] = df.index[j - 1].hasHashtag()
-        df.iloc[j]['WB Has Url'] = df.index[j - 1].hasUrl()
+        df.iloc[j]['WB Contains Number'] = containNumber(df.index[j - 1])
+        df.iloc[j]['WB Has Hashtag'] = hasHashtag(df.index[j - 1])
+        df.iloc[j]['WB Has Url'] = hasUrl(df.index[j - 1])
         if (countVowels(df.index[j - 1]) > 0):
             df.iloc[j]['WB Cons Vow Ratio'] = countCons(df.index[j - 1]) / countVowels(df.index[j - 1])
         else:
@@ -214,14 +276,14 @@ def main():
         df.iloc[j]['W Letter Diff Stem'] = len(df.index[j]) - len(df.index[j])
         df.iloc[j]['W Is Capital'] = df.index[j].istitle()
         df.iloc[j]['W Is All Capital'] = df.index[j].isupper()
-        df.iloc[j]['W Has Punct BA'] = df.index[j].hasPunctuation()
-        df.iloc[j]['W Has Emot BA'] = df.index[j].hasEmoticon()
-        df.iloc[j]['W Has Double Consonant'] = df.index[j].hasConsonant()
-        df.iloc[j]['W Has Double Vowel'] = df.index[j].hasVowel()
+        df.iloc[j]['W Has Punct BA'] = hasPunctuation(df.index[j])
+        df.iloc[j]['W Has Emot BA'] = hasEmoticon(df.index[j])
+        df.iloc[j]['W Has Double Consonant'] = hasConsonant(df.index[j])
+        df.iloc[j]['W Has Double Vowel'] = hasVowel(df.index[j])
         df.iloc[j]['W Has Harmony'] = ''
-        df.iloc[j]['W Contains Number'] = df.index[j].containNumber()
-        df.iloc[j]['W Has Hashtag'] = df.index[j].hasHashtag()
-        df.iloc[j]['W Has Url'] = df.index[j].hasUrl()
+        df.iloc[j]['W Contains Number'] = containNumber(df.index[j])
+        df.iloc[j]['W Has Hashtag'] = hasHashtag(df.index[j])
+        df.iloc[j]['W Has Url'] = hasUrl( df.index[j])
         if (countVowels(df.index[j]) > 0):
             df.iloc[j]['W Cons Vow Ratio'] = countCons(df.index[j]) / countVowels(df.index[j])
         else:
@@ -235,14 +297,14 @@ def main():
         df.iloc[j]['WA Letter Diff Stem'] = len(df.index[j + 1]) - len(df.index[j + 1])
         df.iloc[j]['WA Is Capital'] = df.index[j + 1].istitle()
         df.iloc[j]['WA Is All Capital'] = df.index[j + 1].isupper()
-        df.iloc[j]['WA Has Punct BA'] = df.index[j + 1].hasPunctuation()
-        df.iloc[j]['WA Has Emot BA'] = df.index[j + 1].hasEmoticon()
-        df.iloc[j]['WA Has Double Consonant'] = df.index[j + 1].hasConsonant()
-        df.iloc[j]['WA Has Double Vowel'] = df.index[j + 1].hasVowel()
+        df.iloc[j]['WA Has Punct BA'] = hasPunctuation(df.index[j + 1])
+        df.iloc[j]['WA Has Emot BA'] = hasEmoticon(df.index[j + 1])
+        df.iloc[j]['WA Has Double Consonant'] = hasConsonant(df.index[j + 1])
+        df.iloc[j]['WA Has Double Vowel'] = hasVowel(df.index[j + 1])
         df.iloc[j]['WA Has Harmony'] = ''
-        df.iloc[j]['WA Contains Number'] = df.index[j + 1].containNumber()
-        df.iloc[j]['WA Has Hashtag'] = df.index[j + 1].hasHashtag()
-        df.iloc[j]['WA Has Url'] = df.index[j + 1].hasUrl()
+        df.iloc[j]['WA Contains Number'] = containNumber(df.index[j + 1])
+        df.iloc[j]['WA Has Hashtag'] = hasHashtag(df.index[j + 1])
+        df.iloc[j]['WA Has Url'] = hasUrl(df.index[j + 1])
         if (countVowels(df.index[j + 1]) > 0):
             df.iloc[j]['WA Cons Vow Ratio'] = countCons(df.index[j + 1]) / countVowels(df.index[j + 1])
         else:
@@ -250,6 +312,23 @@ def main():
 
         if (j == 370):
             break
+    for i in range(df2.size):
+        """Tweet"""
+        df2.iloc[j]['Tweet including the word Has Punct BA'] =hasPunctuation(df2.index[i])
+        df2.iloc[j]['Tweet including the word Has Punct BA'] = hasEmoticon(df2.index[i])
+        df2.iloc[j]['Tweet including the word Has Hashtag'] = hasHashtag(df2.index[i])
+        df2.iloc[j]['Tweet including the word Has Mention'] = ''
+        df2.iloc[j]['Tweet including the word Has Url']=hasUrl(df2.index[i])
+        df2.iloc[j]['Frequently used word in Tweet'] =mostUsedWord(df2.index[i])
+        df2.iloc[j]['Tweet FAV Ratio'] = ''
+        df2.iloc[j]['Tweet RT Ratio'] = ''
+        df2.iloc[j]['Tweet Has Location'] = ''
+        df2.iloc[j]['Tweet Has Checkin'] = ''
+        df2.iloc[j]['Tweet Sent From Mobile Device'] = ''
+        df2.iloc[j]['Length of tweet as # of words'] = FindNumberOfWord(df2.index[i],df.index[j])
+        df2.iloc[j]['Length of tweet as # of characters'] = ''
+
+
     print(df)
 
     print('.....')
