@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
@@ -8,7 +8,6 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
-
 
 public partial class _Default : System.Web.UI.Page
 {
@@ -61,7 +60,7 @@ public partial class _Default : System.Web.UI.Page
         getBtn.Visible = false;
         Label1.Visible = false;
         //dosya okuma
-        string dosya_yolu = "C:\\Users\\Fahriye\\Desktop\\new.txt";
+        string dosya_yolu = "C:\\Users\\Fahriye\\Desktop\\tweetler\\ben\\tweet3.txt";
         FileStream fs = new FileStream(dosya_yolu, FileMode.Open, FileAccess.Read);
         StreamReader sw = new StreamReader(fs);
         string yazi;
@@ -132,7 +131,7 @@ public partial class _Default : System.Web.UI.Page
         int sutunSayisi = 2;
         int satirSayisi = words.Length + 1;
         blist = new RadioButtonList[words.Length];
-        String[] listItemNames = {"Person","Location","Organization","Date","Time","Money","Percent","Other"}; 
+        String[] listItemNames = {"Person","Location","Organization","Product","Date","Money","Percent","Other"}; 
         rb = new RadioButton[(words.Length) * 8];
 
         for (int i = 0; i < satirSayisi; i++)
@@ -180,7 +179,9 @@ public partial class _Default : System.Web.UI.Page
 
     public void db_tagtable(string[] wordsplit)
     {
-           string Command = "INSERT INTO tag (word, tagType, sentencenumber) VALUES (@word, @tagType, @sentencenumber) ;";
+        if(wordsplit[1] != "Other")
+        {
+            string Command = "INSERT INTO tweetli (tweet, word, tagType) VALUES (@tweet, @word, @tagType) ;";
             //INSERT INTO users (email, tweetnumber) VALUES (@email, @tweetnumber) ;";
 
             using (SqlConnection myConnection = new SqlConnection(connectionString))
@@ -189,13 +190,15 @@ public partial class _Default : System.Web.UI.Page
                 //etiketlenen kelimeleri db ye at
                 using (SqlCommand myCommand = new SqlCommand(Command, myConnection))
                 {
+                    myCommand.Parameters.AddWithValue("@tweet", sentences[sentenceNumber]);
                     myCommand.Parameters.AddWithValue("@word", wordsplit[0]);
                     myCommand.Parameters.AddWithValue("@tagType", wordsplit[1]);
-                    myCommand.Parameters.AddWithValue("@sentencenumber", sentenceNumber + 1);
                     string Result = (string)myCommand.ExecuteScalar(); // returns the first column of the first row
                 }
                 myConnection.Close();
-            }      
+            }
+        }
+                 
     }
     /*
     public void db_usertable()
