@@ -1,0 +1,9 @@
+-- tablo düzenimizi de değiştirdim. 
+--yeni tablomuzu aşağıdaki komutla oluşutrabilirsin.
+
+ CREATE TABLE tweetli(
+   ID   int IDENTITY(1,1) PRIMARY KEY,
+   tweet VARCHAR (255)     NOT NULL,
+   word VARCHAR (255)     NOT NULL,
+   tagType VARCHAR (255)     NOT NULL
+);
