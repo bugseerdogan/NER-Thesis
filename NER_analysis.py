@@ -8,7 +8,6 @@ sys.setdefaultencoding('utf8')
 import csv
 import pandas as pd
 import numpy as np
-import matplotlib.mlab as mlab
 import matplotlib.pyplot as plt
 
 rows =[]
@@ -24,6 +23,7 @@ df = pd.read_csv('filteredlist.csv' , names=['id', 'word', 'tagType', 'sentencen
 
 personCount , locationCount , organizationCount, productCount= 0,0,0,0
 dateCount , moneyCount , percentCount ,otherCount= 0,0,0,0
+
 
 
 for i in range(0, len(df) - 1):
@@ -46,11 +46,39 @@ for i in range(0, len(df) - 1):
 
 tagTypes = ['Person' , 'Location' , 'Organization' , 'Product' , 'Date' , 'Money' , 'Percent']
 
-count = [personCount, locationCount,organizationCount, productCount,dateCount, moneyCount,percentCount]
-list = {'tagTypes':tagTypes,'count': count}
+
+counter = [personCount, locationCount,organizationCount, productCount,dateCount, moneyCount,percentCount]
+list = {'tagTypes':tagTypes,'counter': counter}
 df_taglist =pd.DataFrame(list)
 
 print df_taglist
 
-print "Mean of tagged word:",df_taglist.mean()
+print "***Max value of tagged value: " ,df_taglist.tagTypes[df_taglist[df_taglist['counter']== max(df_taglist.counter)].index]
 
+print "\n***Min value of tagged value: " ,df_taglist.tagTypes[df_taglist[df_taglist['counter']== min(df_taglist.counter)].index]
+
+print "\n***Mean of tagged word:",df_taglist.mean()
+
+print "\n***Standart deviation of tagged word:",df_taglist.std()
+
+
+N=7
+## necessary variables
+ind = np.arange(N)  # the x locations for the groups
+width = 0.25  # the width of the bars
+menStd = [0, 0, 0, 0, 0, 0, 0]
+
+fig = plt.figure()
+ax = fig.add_subplot(111)
+rects4 = ax.bar(ind, counter, width,color='black',yerr=menStd, error_kw=dict(elinewidth=7, ecolor='red'))
+
+# axes and labels
+ax.set_xlim(-width, len(ind) + width)
+ax.set_ylim(0, max(df_taglist.counter)+100)
+ax.set_title('class histogram')
+xTickMarks = ['person','location','organization', 'product','date','money','percent']
+ax.set_xticks(ind + width)
+xtickNames = ax.set_xticklabels(xTickMarks)
+plt.setp(xtickNames, rotation=45, fontsize=10)
+
+plt.show()
