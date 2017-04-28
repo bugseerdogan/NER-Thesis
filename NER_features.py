@@ -7,23 +7,27 @@ import pandas as pd
 import re
 import csv
 import collections
-
-def countVowels(string):
-    vowel = ("aıioöuüAEIİOÖUÜ")
-    count = 0
-    for i in string:
-        if i in vowel:
-            count += 1
-    return count
-
-
-def countCons(string):
-    cons = ("bcçdfgğhjklmnprsştyzBCÇDFGĞHJKLMNPRSŞTVYZ")
-    count = 0
-    for i in string:
-        if i in cons:
-            count += 1
-    return count
+def isCapital(string):
+    #letter = ("ğöüşİÖÜŞĞ")
+    if string.find("ğ") != -1:
+        string = string.replace("ğ", "g");
+    if string.find("Ğ") != -1:
+        string = string.replace("Ğ", "G");
+    if string.find("ö") != -1:
+        string = string.replace("ö", "o");
+    if string.find("Ö") != -1:
+        string = string.replace("ğ", "g");
+    if string.find("ü") != -1:
+        string = string.replace("ü", "u");
+    if string.find("Ü") != -1:
+        string = string.replace("Ü", "U");
+    if string.find("ş") != -1:
+        string = string.replace("ş", "s");
+    if string.find("Ş") != -1:
+        string = string.replace("Ş", "S");
+    if string.find("İ") != -1:
+        string = string.replace("İ", "I");
+    return string;
 
 def hasPunctuation(word):
     words = []
@@ -137,54 +141,54 @@ def mean_calculate(number1,number2,number3):
 def main():
     data = {
         'Word Before': [''],
-        'WB Stem': [''],
-        'WB POS Tag': [''],
+        #'WB Stem': [''],
+        #'WB POS Tag': [''],
         'WB Letter': [''],
-        'WB Letter Diff Stem': [''],
+        #'WB Letter Diff Stem': [''],
         'WB Is Capital': [''],
         'WB Is All Capital': [''],
         'WB Has Punct BA': [''],
         'WB Has Emot BA': [''],
-        'WB Has Double Consonant': [''],
-        'WB Has Double Vowel': [''],
-        'WB Has Harmony': [''],
-        'WB Cons Vow Ratio': [''],
+        #'WB Has Double Consonant': [''],
+        #'WB Has Double Vowel': [''],
+        #'WB Has Harmony': [''],
+        #'WB Cons Vow Ratio': [''],
         'WB Contain Number': [''],
         'WB Has Hashtag': [''],
         'WB Has Url': [''],
         'WB Class': [''],
 
         'Word': [''],
-        'W Stem': [''],
-        'W POS Tag': [''],
+        #'W Stem': [''],
+        #'W POS Tag': [''],
         'W Letter': [''],
-        'W Letter Diff Stem': [''],
+        #'W Letter Diff Stem': [''],
         'W Is Capital': [''],
         'W Is All Capital': [''],
         'W Has Punct BA': [''],
         'W Has Emot BA': [''],
-        'W Has Double Consonant': [''],
-        'W Has Double Vowel': [''],
-        'W Has Harmony': [''],
-        'W Cons Vow Ratio': [''],
+        #'W Has Double Consonant': [''],
+        #'W Has Double Vowel': [''],
+        #'W Has Harmony': [''],
+        #'W Cons Vow Ratio': [''],
         'W Contain Number': [''],
         'W Has Hashtag': [''],
         'W Has Url': [''],
         'W Class': [''],
 
         'Word After': [''],
-        'WA Stem': [''],
-        'WA POS Tag': [''],
+        #'WA Stem': [''],
+        #'WA POS Tag': [''],
         'WA Letter': [''],
-        'WA Letter Diff Stem': [''],
+        #'WA Letter Diff Stem': [''],
         'WA Is Capital': [''],
         'WA Is All Capital': [''],
         'WA Has Punct BA': [''],
         'WA Has Emot BA': [''],
-        'WA Has Double Consonant': [''],
-        'WA Has Double Vowel': [''],
-        'WA Has Harmony': [''],
-        'WA Cons Vow Ratio': [''],
+        #'WA Has Double Consonant': [''],
+        #'WA Has Double Vowel': [''],
+        #'WA Has Harmony': [''],
+        #'WA Cons Vow Ratio': [''],
         'WA Contain Number': [''],
         'WA Has Hashtag': [''],
         'WA Has Url': [''],
@@ -275,68 +279,68 @@ def main():
 
         """ Word Before """
         df.iloc[j]['Word Before'] = df.index[j - 1]
-        df.iloc[j]['WB Stem'] = df.index[j - 1]
-        df.iloc[j]['WB POS Tag'] = 'X'
+        #df.iloc[j]['WB Stem'] = 'X'
+        #df.iloc[j]['WB POS Tag'] = 'X'
         df.iloc[j]['WB Letter'] = len(df.index[j - 1])
-        df.iloc[j]['WB Letter Diff Stem'] = len(df.index[j - 1]) - len(df.index[j - 1])
-        df.iloc[j]['WB Is Capital'] = df.index[j - 1].istitle()
+        #df.iloc[j]['WB Letter Diff Stem'] = 'X'
+        df.iloc[j]['WB Is Capital'] = isCapital(df.index[j - 1])
         df.iloc[j]['WB Is All Capital'] = df.index[j - 1].isupper()
         df.iloc[j]['WB Has Punct BA'] = hasPunctuation(df.index[j - 1])
         df.iloc[j]['WB Has Emot BA'] = hasEmoticon(df.index[j - 1])
-        df.iloc[j]['WB Has Double Consonant'] = hasConsonant(df.index[j - 1])
-        df.iloc[j]['WB Has Double Vowel'] = hasVowel(df.index[j - 1])
-        df.iloc[j]['WB Has Harmony'] = ''
+        #df.iloc[j]['WB Has Double Consonant'] = hasConsonant(df.index[j - 1])
+        #df.iloc[j]['WB Has Double Vowel'] = hasVowel(df.index[j - 1])
+        #df.iloc[j]['WB Has Harmony'] = ''
         df.iloc[j]['WB Contains Number'] = containNumber(df.index[j - 1])
         df.iloc[j]['WB Has Hashtag'] = hasHashtag(df.index[j - 1])
         df.iloc[j]['WB Has Url'] = hasUrl(df.index[j - 1])
-        if (countVowels(df.index[j - 1]) > 0):
-            df.iloc[j]['WB Cons Vow Ratio'] = countCons(df.index[j - 1]) / countVowels(df.index[j - 1])
-        else:
-            df.iloc[j]['WB Cons Vow Ratio'] = 0
+        #if (countVowels(df.index[j - 1]) > 0):
+        #    df.iloc[j]['WB Cons Vow Ratio'] = countCons(df.index[j - 1]) / countVowels(df.index[j - 1])
+        #else:
+        #    df.iloc[j]['WB Cons Vow Ratio'] = 0
         df.iloc[j]['WB Class'] = taglist[j-1]
 
         """ Word """
         df.iloc[j]['Word'] = df.index[j]
-        df.iloc[j]['W Stem'] = df.index[j]
-        df.iloc[j]['W POS Tag'] = 'X'
+        #df.iloc[j]['W Stem'] = 'X'
+        #df.iloc[j]['W POS Tag'] = 'X'
         df.iloc[j]['W Letter'] = len(df.index[j])
-        df.iloc[j]['W Letter Diff Stem'] = len(df.index[j]) - len(df.index[j])
-        df.iloc[j]['W Is Capital'] = df.index[j].istitle()
+        #df.iloc[j]['W Letter Diff Stem'] = 'X'
+        df.iloc[j]['W Is Capital'] = isCapital(df.index[j])
         df.iloc[j]['W Is All Capital'] = df.index[j].isupper()
         df.iloc[j]['W Has Punct BA'] = hasPunctuation(df.index[j])
         df.iloc[j]['W Has Emot BA'] = hasEmoticon(df.index[j])
-        df.iloc[j]['W Has Double Consonant'] = hasConsonant(df.index[j])
-        df.iloc[j]['W Has Double Vowel'] = hasVowel(df.index[j])
-        df.iloc[j]['W Has Harmony'] = ''
+        #df.iloc[j]['W Has Double Consonant'] = hasConsonant(df.index[j])
+        #df.iloc[j]['W Has Double Vowel'] = hasVowel(df.index[j])
+        #df.iloc[j]['W Has Harmony'] = ''
         df.iloc[j]['W Contains Number'] = containNumber(df.index[j])
         df.iloc[j]['W Has Hashtag'] = hasHashtag(df.index[j])
         df.iloc[j]['W Has Url'] = hasUrl( df.index[j])
-        if (countVowels(df.index[j]) > 0):
-            df.iloc[j]['W Cons Vow Ratio'] = countCons(df.index[j]) / countVowels(df.index[j])
-        else:
-            df.iloc[j]['W Cons Vow Ratio'] = 0
+        #if (countVowels(df.index[j]) > 0):
+        #    df.iloc[j]['W Cons Vow Ratio'] = countCons(df.index[j]) / countVowels(df.index[j])
+        #else:
+        #    df.iloc[j]['W Cons Vow Ratio'] = 0
         df.iloc[j]['W Class'] = taglist[j]
 
         """ Word After """
         df.iloc[j]['Word After'] = df.index[j + 1]
-        df.iloc[j]['WA Stem'] = df.index[j + 1]
-        df.iloc[j]['WA POS Tag'] = 'X'
+        #df.iloc[j]['WA Stem'] = df.index[j + 1]
+        #df.iloc[j]['WA POS Tag'] = 'X'
         df.iloc[j]['WA Letter'] = len(df.index[j + 1])
-        df.iloc[j]['WA Letter Diff Stem'] = len(df.index[j + 1]) - len(df.index[j + 1])
-        df.iloc[j]['WA Is Capital'] = df.index[j + 1].istitle()
+        #df.iloc[j]['WA Letter Diff Stem'] = len(df.index[j + 1]) - len(df.index[j + 1])
+        df.iloc[j]['WA Is Capital'] = isCapital(df.index[j + 1])
         df.iloc[j]['WA Is All Capital'] = df.index[j + 1].isupper()
         df.iloc[j]['WA Has Punct BA'] = hasPunctuation(df.index[j + 1])
         df.iloc[j]['WA Has Emot BA'] = hasEmoticon(df.index[j + 1])
-        df.iloc[j]['WA Has Double Consonant'] = hasConsonant(df.index[j + 1])
-        df.iloc[j]['WA Has Double Vowel'] = hasVowel(df.index[j + 1])
-        df.iloc[j]['WA Has Harmony'] = ''
+        #df.iloc[j]['WA Has Double Consonant'] = hasConsonant(df.index[j + 1])
+        #df.iloc[j]['WA Has Double Vowel'] = hasVowel(df.index[j + 1])
+        #df.iloc[j]['WA Has Harmony'] = ''
         df.iloc[j]['WA Contains Number'] = containNumber(df.index[j + 1])
         df.iloc[j]['WA Has Hashtag'] = hasHashtag(df.index[j + 1])
         df.iloc[j]['WA Has Url'] = hasUrl(df.index[j + 1])
-        if (countVowels(df.index[j + 1]) > 0):
-            df.iloc[j]['WA Cons Vow Ratio'] = countCons(df.index[j + 1]) / countVowels(df.index[j + 1])
-        else:
-            df.iloc[j]['WA Cons Vow Ratio'] = 0
+        #if (countVowels(df.index[j + 1]) > 0):
+        #    df.iloc[j]['WA Cons Vow Ratio'] = countCons(df.index[j + 1]) / countVowels(df.index[j + 1])
+        #else:
+        #    df.iloc[j]['WA Cons Vow Ratio'] = 0
         df.iloc[j]['WA Class'] = taglist[j + 1]
 
         if (j == 370):
@@ -358,7 +362,6 @@ def main():
         df2.iloc[i]['Length of tweet as # of words'] = len(df2.index[i].split())
         df2.iloc[i]['Length of tweet as # of characters'] = len(df2.iloc[i]['Tweet'])
 
-
-    print('.....')
+    print(df)
 
 main()
