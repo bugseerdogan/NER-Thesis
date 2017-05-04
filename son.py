@@ -366,16 +366,23 @@ def main():
     #print('AAAAA')
     #print (df2.iloc[i])
 
+    array_dic=[]
+    array_class =[]
+    for i in range ((df.size)):
+        array_dic.append(df.iloc[i])
+        array_class.append((df.iloc[i]['W Class']))
+        if(i == 370):
+            break
 
-    '''
+
     from sklearn.feature_extraction import DictVectorizer
     vec = DictVectorizer()
-    train_vector = vec.fit_transform(df['Word'])
+    train_vector = vec.fit_transform(array_dic)
 
     # 1. METHOD: LOGISTIC REGRESSION
     from sklearn.linear_model.logistic import LogisticRegression
     train_model = LogisticRegression()
-    train_model.fit(train_vector, df['W Class'])
+    train_model.fit(train_vector, array_class)
 
     lines_test = []
     f = open('test.csv', 'rt')
@@ -386,24 +393,25 @@ def main():
     finally:
         f.close()
 
-        array_dic_test = []
-        test_class = []
-        for i in range(0, len(lines_test)):
+    array_dic_test = []
+    test_class = []
+    for i in range(0, len(lines_test)):
 
-            if (lines_test[i] != []):
-                dic_test = dict()
-                dic_test['word'] = lines_test[i][2]
-                array_dic_test.append(dic_test)
-                test_class.append(lines_test[i][3])
+        if (lines_test[i] != []):
+            dic_test = dict()
+            dic_test['word'] = lines_test[i][2]
+            array_dic_test.append(dic_test)
+            test_class.append(lines_test[i][3])
 
-        test_vector = vec.transform(array_dic_test)
+
+    test_vector = vec.transform(array_dic_test)
 
         # PREDICT CLASS
-        predicted = []
-        predicted = train_model.predict(test_vector)
+    predicted = []
+    predicted = train_model.predict(test_vector)
 
     from sklearn.metrics import classification_report
-    print(classification_report(test_class, predicted, target_names=list(set(test_class))))
+    print(classification_report(test_class, predicted))
 
-'''
+
 main()
